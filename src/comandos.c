@@ -45,6 +45,7 @@ static int texto_vazio(const char *texto) {
 
 int comando_ajuda(const char *args) {
     size_t i;
+    size_t tamanho = 0;
 
     if (texto_vazio(args)) {
         puts("Comandos disponiveis:");
@@ -57,8 +58,13 @@ int comando_ajuda(const char *args) {
     while (*args == ' ' || *args == '\t')   /* pula espacos do inicio */
         args++;
 
+    /* mede a primeira palavra (ignora o que vier depois dela) */
+    while (args[tamanho] != '\0' && args[tamanho] != ' ' && args[tamanho] != '\t')
+        tamanho++;
+
     for (i = 0; i < quantidade_comandos; i++) {
-        if (strcmp(args, comandos[i].nome) == 0) {
+        if (strlen(comandos[i].nome) == tamanho &&
+            strncmp(args, comandos[i].nome, tamanho) == 0) {
             printf("%s\nSintaxe:\n%s\nExemplo(s):\n%s\n",
                    comandos[i].descricao,
                    comandos[i].sintaxe,

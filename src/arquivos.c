@@ -3,68 +3,85 @@
 #include <stdio.h>
 #include <string.h>
 
-// Função CRIAR
-int comando_criar(char nome[], char texto[]) {
-
+// Comando CRIAR
+int comando_criar(const char *args)
+{
     FILE *arquivo;
+    char nome[100];
+    char texto[1000];
 
-    // Verifica se o nome e o texto foram informados
-    if (nome[0] == '\0' || texto[0] == '\0') {
+    // Verifica se os argumentos foram informados
+    if (args == NULL || args[0] == '\0')
+    {
         printf("Nome ou texto nao informado!\n");
-        return 0;
+        return 1;
+    }
+
+    // Separa o nome do arquivo e o texto
+    if (sscanf(args, "%99s %999[^\n]", nome, texto) != 2)
+    {
+        printf("Nome ou texto nao informado!\n");
+        return 1;
+    }
+
+    // Verifica se o nome possui barras
+    if (strchr(nome, '/') != NULL || strchr(nome, '\\') != NULL)
+    {
+        printf("Nome do arquivo invalido!\n");
+        return 1;
     }
 
     // Abre o arquivo para escrita
     arquivo = fopen(nome, "w");
 
-    // Verifica se conseguiu criar o arquivo
-    if (arquivo == NULL) {
+    if (arquivo == NULL)
+    {
         printf("Erro ao criar arquivo!\n");
-        return 0;
+        return 1;
     }
 
-    // Grava o texto dentro do arquivo
+    // Grava o texto no arquivo
     fprintf(arquivo, "%s", texto);
 
-    // Fecha o arquivo
     fclose(arquivo);
 
     printf("Arquivo criado com sucesso!\n");
 
-    return 1;
+    return 0;
 }
 
 
-// Função CAT
-int comando_cat(char nome[]) {
-
+// Comando CAT
+int comando_cat(const char *args)
+{
     FILE *arquivo;
     char texto[1000];
 
     // Verifica se o nome foi informado
-    if (nome[0] == '\0') {
+    if (args == NULL || args[0] == '\0')
+    {
         printf("Nome do arquivo nao informado!\n");
-        return 0;
+        return 1;
     }
 
     // Abre o arquivo para leitura
-    arquivo = fopen(nome, "r");
+    arquivo = fopen(args, "r");
 
-    // Verifica se o arquivo existe
-    if (arquivo == NULL) {
+    if (arquivo == NULL)
+    {
         printf("Arquivo nao encontrado!\n");
-        return 0;
+        return 1;
     }
 
-    // Lê o conteúdo do arquivo
-    while (fgets(texto, sizeof(texto), arquivo) != NULL) {
+    // Lê e exibe o conteúdo
+    while (fgets(texto, sizeof(texto), arquivo) != NULL)
+    {
         printf("%s", texto);
     }
 
-    // Fecha o arquivo
     fclose(arquivo);
 
     printf("\n");
 
-    return 1;
+    return 0;
 }

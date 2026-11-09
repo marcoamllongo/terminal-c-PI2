@@ -5,13 +5,13 @@ int comando_ec(const char *args);
 #define COMANDOS_H
 
 /*
- * Mostra a lista de comandos quando nome_comando for NULL ou vazio.
- * Quando receber um nome, mostra a sintaxe e exemplos daquele comando.
- * Comando desconhecido gera uma mensagem informativa.
+ * Mostra a lista de comandos quando args for NULL ou vazio.
+ * Quando receber um nome, mostra a descricao, a sintaxe e exemplos daquele comando.
+ * Retorna 0 em caso de sucesso e 1 se o comando for desconhecido.
  */
-void comando_ajuda(const char *nome_comando);
+int comando_ajuda(const char *args);
 
 /* Imprime o texto recebido. Retorna 0 em caso de sucesso e 1 se estiver vazio. */
-int comando_ec(const char *texto);
+int comando_ec(const char *args);
 
 #endif
